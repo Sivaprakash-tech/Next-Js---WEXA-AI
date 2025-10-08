@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wexa-ai-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: wexa-ai
+  template:
+    metadata:
+      labels:
+        app: wexa-ai
+    spec:
+      containers:
+        - name: wexa-ai
+          image: ghcr.io/sivaprakash-tech/nextjs-wexa-ai:latest
+          ports:
+            - containerPort: 3000
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 3000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 3000
+            initialDelaySeconds: 15
+            periodSeconds: 20
